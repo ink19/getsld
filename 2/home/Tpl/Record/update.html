@@ -1,9 +1,0 @@
-<form action="{:U('Record/updating?record_id='.$_GET['record_id'])}" method="post">
-域名：{$record_info[1]['sub_domain']}.{$record_info[1]['frist_domain']}<br />
-<select name="record_type" class="login-input" value="{$record_info[1]['record_type']}" >
-<option value="A">选择记录类型（默认A记录）</option>
-<option value="A">A记录</option>
-<option value="CNAME">CNAME记录</option>
-</select>
-<input type="text" name="value" value="{$record_info[1]['value']}" class="login-input" />
-<input type="submit" name="submit" value="提交" class="login-submit" /></form>

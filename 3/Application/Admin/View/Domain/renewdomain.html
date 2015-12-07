@@ -1,8 +1,0 @@
-{$result}<br />
-<form action="{: U('Admin/Domain/renewdomain?frist_domain='.$frist_domain2)}" method="post">
-域名：{$frist_domain2}<br />
-<input type="text" name="domain_id" value="{$frist_domain['domain_id']}" class="login-input" placeholder="域名ID" />
-<input type="text" name="token_id" value="{$frist_domain['token_id']}" class="login-input" placeholder="Token的id" />
-<input type="text" name="token" value="{$frist_domain['token']}" class="login-input" placeholder="Token" />
-<input type="hidden" name="id" value="{$id}">
-<input type="submit" name="submit" value="提交" class="login-submit" /></form>

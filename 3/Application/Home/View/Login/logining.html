@@ -1,4 +1,0 @@
-<if condition="$result['0']">
-登录成功！欢迎{$result['1']['name']},上次登录时间{:date('Y年m月d日  h:i:s',$result['1']['login_time'])}<a href="{:U('Index/index')}">进入系统</a>
-<else />登录失败，原因：{$result['1']}。<a href="{:U('Login/index')}">返回登录</a>
-</if>
