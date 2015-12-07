@@ -1,0 +1,40 @@
+<br>
+<div class="am-g am-text-lg">
+	<form>
+		<div class="am-u-sm-2">记录限制：</div>
+		<div class="am-u-sm-8"><input type="text" value="" id="limit-number-input" class="am-form-field am-radius"/></div>
+		<div class="am-u-sm-2"><button class="am-btn am-btn-primary am-radius" id="limit-number-button" type="button">提交</button></div>
+	</form>
+</div>
+<p>注：0代表无限制，其他字符代表限制</p>
+<script>
+$(function(){
+	$.post("{:U('User/ajax_limit_number')}",function(result){
+		$("#limit-number-input").val(result);
+	});
+});
+$(function(){
+	$("#limit-number-button").click(function(){
+		$("#limit-number-input").attr("disabled",1);
+		$("#limit-number-button").attr("disabled",1);
+		var limit_number = $("#limit-number-input").val();
+		if(limit_number){
+			$.post("{:U('User/ajax_limit_number')}","limit_number="+limit_number,function(result){
+				if(result == "1"){
+					alert("修改成功");
+					$("#limit-number-input").removeAttr("disabled");
+					$("#limit-number-button").removeAttr("disabled");
+				}else{
+					alert(result);
+					$("#limit-number-input").removeAttr("disabled");
+					$("#limit-number-button").removeAttr("disabled");
+				}
+			});
+		}else{
+			alert("请填写完整的信息");
+			$("#limit-number-input").removeAttr("disabled");
+			$("#limit-number-button").removeAttr("disabled");
+		}
+	});
+});
+</script>

@@ -1,0 +1,89 @@
+<br />
+<table class="am-table am-table-bordered am-table-radius am-table-striped"><thead><tr><th>域名</th><th>类型</th><th>记录值</th><th>操作</th></tr></thead>
+<tbody><foreach name="record" item="i">
+<tr><td id="myrecord-domain">{$i['sub_domain']}.{$i['first_domain']}</td>
+<td>{$i['record_type']}</td>
+<td id="myrecord-value">{$i['value']}</td>
+<td data-value="{$i['record_id']}"><button class="am-btn am-btn-warning am-btn-xs am-round" id="myrecord-button-change">改</button>
+/<button class="am-btn am-btn-danger am-btn-xs am-round" id="myrecord-button-delete">删</button></td></tr>
+</foreach></tbody>
+</table>
+<div class="am-modal am-modal-confirm" tabindex="-1" id="myrecord-modal-delete">
+	<div class="am-modal-dialog">
+		<div class="am-modal-hd"><b>删除记录？</b></div>
+		<div class="am-modal-bd">
+			你确定要删除<span id="delete-warning" div="am-badge am-badge-danger am-round"></span>吗？
+			<input id="delete-data" value="" type="hidden">
+		</div>
+		<div class="am-modal-footer">
+			<span class="am-modal-btn" data-am-modal-confirm id="delete-true">确定</span>
+			<span class="am-modal-btn" data-am-modal-cancel id="delete-false">取消</span>
+		</div>
+	</div>
+</div>
+<div class="am-modal am-modal-confirm" tabindex="-1" id="myrecord-modal-change">
+	<div class="am-modal-dialog">
+		<div class="am-modal-hd"><b>修改记录</b></div>
+		<div class="am-modal-bd">
+			<input id="change-data" value="" type="hidden">
+			域名：<span id="myrecord-change-record"></span><br />
+			记录类型：<select id="myrecord-select-recordtype" class="login-input">
+			<option value="A">选择记录类型（默认A记录）</option>
+			<option value="A">A记录</option>
+			<option value="CNAME">CNAME记录</option>
+			</select><br />
+			记录值：<input type="text" id="myrecord-input-recordvalue" class="login-input" />
+		</div>
+		<div class="am-modal-footer">
+			<span class="am-modal-btn" data-am-modal-confirm id="delete-true">确定</span>
+			<span class="am-modal-btn" data-am-modal-cancel id="delete-false">取消</span>
+		</div>
+	</div>
+</div>
+<script>
+$(function(){
+	$("button#myrecord-button-delete").click(function(){
+		$("#delete-warning").text($(this).parent().prevAll("#myrecord-domain").text());
+		$("#delete-data").val($(this).parent().attr("data-value"));
+		$("#myrecord-modal-delete").modal({
+			relatedElement: this,
+			onConfirm:function(){
+				id = $("#delete-data").val();
+				$.post( "{:U('Record/deletemyrecord')}" + "&" + Math.random(),"id="+id,function(response,status){
+					if(response == "1"){
+						alert("删除成功");
+						MyAjax($('#contents-myrecord').attr('data-value'));
+					}else{
+						alert(response);
+					}
+				})
+			},
+			onCancel:function(){}
+		});
+	});
+	$("button#myrecord-button-change").click(function(){
+		$("#change-data").val($(this).parent().attr("data-value"));
+		$("#myrecord-change-record").text($(this).parent().prevAll("#myrecord-domain").text());
+		$("#myrecord-input-recordvalue").val($(this).parent().prevAll("#myrecord-value").text());
+		$("#myrecord-modal-change").modal({
+			relatedElement:this,
+			onConfirm:function(){
+				id = $("#change-data").val();
+				type = $("#myrecord-select-recordtype").val();
+				value = $("#myrecord-input-recordvalue").val();
+				$.post("{:U('Record/changemyrecord')}","id="+id+"&type="+type+"&value="+value,function(result){
+					if(result == "1"){
+						alert("修改成功");
+						MyAjax($('#contents-myrecord').attr('data-value'));
+					}else{
+						alert(result);
+					}
+				});
+			},
+			onCancel:function(){}
+		});
+		
+	});
+});
+</script>
+<br />

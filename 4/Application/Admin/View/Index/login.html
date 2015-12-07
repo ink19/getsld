@@ -1,0 +1,40 @@
+<div class="am-g" style="height:30%"></div>
+<div class="am-g am-g-fixed">
+	<div class="am-u-sm-6 am-u-sm-centered">
+		<div class="am-panel am-panel-default am-radius">
+			<div class="am-panel-hd am-text-center am-text-xxl">登入</div>
+			<div class="am-panel-bd" style="font-size:2rem;">
+					<form class="am-form">
+						<fieldset class="am-form-set">
+							<input type="text" id="name" placeholder="管理员">
+							<input type="password" id="password" placeholder="密码">
+						</fieldset>
+						<button type="button" id="login-button" class="am-btn am-btn-primary am-btn-block">登入</button>
+					</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$(function(){
+	$("#login-button").click(function(){
+		$("fieldset").attr("disabled","1");
+		var name = $("#name").val();
+		var password = $("#password").val();
+		if(name && password){
+			$.post("{:U('Index/ajax_login')}","name="+name+"&password="+password,function(result){
+				if(result == "1"){
+					alert("登入成功");
+					location.href = "{:U('Index/index')}";
+				}else{
+					alert("登入失败");
+					$("fieldset").removeAttr("disabled");
+				}
+			});
+		}else{
+			alert("信息未填写完整");
+		}
+		
+	});
+});
+</script>

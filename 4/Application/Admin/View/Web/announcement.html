@@ -1,0 +1,49 @@
+<br>
+<div class="am-g">
+	<form>
+		<div class="am-g am-text-lg"><div class="am-u-sm-2">标题：</div>
+		<div class="am-u-sm-8"><input type="text" id="announcement-tittle" class="am-form-field am-radius" /></div>
+		<div class="am-u-sm-2"><button class="am-btn am-btn-primary am-radius" id="announcement-button" type="button">提交</button></div></div>
+		<hr />
+		<div class="am-text-lg">公告内容：</div>
+		<div class="am-form-group am-text-lg am-text-center"><textarea class="am-radius" rows="15" cols="80" id="announcement-text"></textarea></div>
+		
+	</form>
+</div>
+<script>
+$(function(){
+	$.post("{:U('Web/ajax_announcement')}",function(result){
+		$("#announcement-text").val(result.announcement);
+		$("#announcement-tittle").val(result.tittle);
+	},"json");
+});
+$(function(){
+	$("#announcement-button").click(function(){
+		$("#announcement-text").attr("disabled",1);
+		$("#announcement-tittle").attr("disabled",1);
+		$("#announcement-button").attr("disabled",1);
+		var tittle = $("#announcement-tittle").val();
+		var announcement = $("#announcement-text").val();
+		if(announcement && tittle){
+			$.post("{:U('Web/ajax_announcement')}","announcement="+announcement+"&tittle="+tittle,function(result){
+				if(result == "1"){
+					alert("修改成功");
+					$("#announcement-text").removeAttr("disabled");
+					$("#announcement-tittle").removeAttr("disabled");
+					$("#announcement-button").removeAttr("disabled");
+				}else{
+					alert(result);
+					$("#announcement-text").removeAttr("disabled");
+					$("#announcement-tittle").removeAttr("disabled");
+					$("#announcement-button").removeAttr("disabled");
+				}
+			});
+		}else{
+			alert("请填写完整的信息");
+			$("#announcement-text").removeAttr("disabled");
+			$("#announcement-tittle").removeAttr("disabled");
+			$("#announcement-button").removeAttr("disabled");
+		}
+	});
+});
+</script>

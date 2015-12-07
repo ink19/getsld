@@ -1,0 +1,13 @@
+<form action="{:U('Record/adding')}" method="post" name="input">
+<input type="text" name="sub_domain" class="login-input" placeholder="域名前缀" />
+<select name="frist_domain" class="login-input"  >
+<option value="">选择域名后缀</option>
+<foreach name="conf_frist_domain" item="i">
+<option value="{$i}">{$i}</option>
+</foreach>
+</select><select name="record_type" class="login-input" >
+<option value="A">记录类型（默认A记录）</option>
+<option value="A">A记录</option>
+<option value="CNAME">CNAME记录</option>
+</select><input type="text" name="value" class="login-input" placeholder="记录值" /><br />
+<input type="submit" name="submit" value="提交" class="login-submit" /></form>

@@ -1,0 +1,9 @@
+<p>{$UserInfo['name']}[<a href="{:U('User/updateuser')}" class="link1" >修改资料</a>|<a class="link1" href="{:U('User/logoff')}">注销登录</a>]</p>
+<hr color="gray" />
+<p><a class="link1" href="{:U('Record/add')}">添加记录</a></p>
+<hr color="blue" />
+<table><tr><td>域名</td><td>类型</td><td>记录值</td><td>操作</td></tr>
+<foreach name="record" item="i">
+<tr><td>{$i['sub_domain']}.{$i['frist_domain']}</td><td>{$i['record_type']}</td><td>{$i['value']}</td><td><a class="link1" href="{:U('Record/update?record_id='.$i['record_id'])}">改</a>/<a class="link1" href="{:U('Record/delete?record_id='.$i['record_id'])}">删</a></td></tr>
+</foreach>
+</table>

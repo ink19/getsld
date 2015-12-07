@@ -1,0 +1,40 @@
+<br>
+<div class="am-g">
+	<form>
+		<div class="am-g am-text-lg"><div class="am-u-sm-2">站长信息：</div>
+		<div class="am-u-sm-2"><button class="am-btn am-btn-primary am-radius" id="admininfo-button" type="button">提交</button></div></div>
+		<br /><div class="am-form-group am-text-lg am-text-center"><textarea class="am-radius" rows="15" cols="80" id="admininfo-text"></textarea></div>
+		
+	</form>
+</div>
+<script>
+$(function(){
+	$.post("{:U('Web/ajax_admininfo')}",function(result){
+		$("#admininfo-text").val(result);
+	});
+});
+$(function(){
+	$("#admininfo-button").click(function(){
+		$("#admininfo-text").attr("disabled",1);
+		$("#admininfo-button").attr("disabled",1);
+		var admininfo = $("#admininfo-text").val();
+		if(admininfo){
+			$.post("{:U('Web/ajax_admininfo')}","admin_info="+admininfo,function(result){
+				if(result == "1"){
+					alert("修改成功");
+					$("#admininfo-text").removeAttr("disabled");
+					$("#admininfo-button").removeAttr("disabled");
+				}else{
+					alert(result);
+					$("#admininfo-text").removeAttr("disabled");
+					$("#admininfo-button").removeAttr("disabled");
+				}
+			});
+		}else{
+			alert("请填写完整的信息");
+			$("#admininfo-text").removeAttr("disabled");
+			$("#admininfo-button").removeAttr("disabled");
+		}
+	});
+});
+</script>

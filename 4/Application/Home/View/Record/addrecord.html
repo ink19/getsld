@@ -1,0 +1,61 @@
+<br />
+<div>
+	<fieldset>
+	<font align="left" color="#10a0ea">
+	<div  class="am-g am-g-fixed"><div class="am-u-sm-2">域名前缀：</div>
+		<div class="am-u-sm-10"><input value="" id="sub_domain" class="am-form-field am-radius"></div></div><br />
+	<div  class="am-g am-g-fixed"><div class="am-u-sm-2">域名后缀：</div>
+	<div class="am-u-sm-10"><select name="first_domain" id="first_domain">
+				<foreach name="conf_first_domain" item="i">
+					<option value="{$i}">{$i}</option>
+				</foreach>
+			</select></div></div><br />
+	<div  class="am-g am-g-fixed"><div class="am-u-sm-2">记录类型：</div>
+	<div class="am-u-sm-10"></select><select id="record_type" class="login-input" >
+				<option value="A">记录类型（默认A记录）</option>
+				<option value="A">A记录</option>
+				<option value="CNAME">CNAME记录</option>
+				</select></div></div><br />
+	<div class="am-g am-g-fixed"><div class="am-u-sm-2">记录值：</div>
+	<div class="am-u-sm-10"><input value="" id="value" class="am-form-field am-radius"></div></div><br />
+	<div class="am-g am-g-fixed"><div class="am-u-sm-2">验证码：</div><div class="am-u-sm-7"><input value="" id="verify" class="am-form-field am-radius"></div>&nbsp;
+	<div class="am-u-sm-2"><img src="{:U('Public/verify')}" class="am-img-responsive" id="verify_img" alt="验证码" /></div>
+	</div>
+	<hr />
+	<button type="button" id="add-button" class="am-btn am-btn-primary am-radius">提交</button>
+	</font>
+	</fieldset>
+</div>
+<br />
+<script>
+$(function(){
+	$("#add-button").click(function(){
+		var sub_domain = $("#sub_domain").val();
+		var first_domain = $("#first_domain").val();
+		var record_type = $("#record_type").val();
+		var value = $("#value").val();
+		var verify = $("#verify").val();
+		$("fieldset").attr("disabled","1");
+		$.post("{:U('Record/ajax_add')}","sub_domain="+sub_domain+"&first_domain="+first_domain+"&record_type="+record_type+"&value="+value+"&verify="+verify,function(result){
+			if(result == "1"){
+				alert("添加成功");
+				MyAjax($('#contents-myrecord').attr('data-value'));
+			}else{
+				alert("错误！"+result);
+				$("fieldset").removeAttr("disabled");
+				change_verify();
+			}
+		});
+	});
+	function change_verify(){
+		var verify;
+		verify = $("#verify_img");
+		verify.attr("src",verify.attr("src")+"&"+Math.random());
+	}
+	$("#verify_img").click(function(){
+		change_verify();
+	});
+});
+
+
+</script>

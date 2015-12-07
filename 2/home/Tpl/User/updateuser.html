@@ -1,0 +1,9 @@
+<if condition="isset($result)">
+{$result['1']}
+</if><br />
+<form name="input" action="{:U('User/updateuser')}" method="post" >
+用户ID：{$UserInfo['id']}；<br />
+用户名：{$UserInfo['name']}；<br />
+<input type="password" name="pwd" class="login-input" placeholder="新密码" />
+<input type="text" name="email" value="{$UserInfo['email']}" class="login-input" placeholder="邮箱" /><br />
+<input type="submit" name="go" value="提交" class="login-submit" /></form>

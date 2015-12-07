@@ -1,0 +1,6 @@
+{$result}<br />
+<form action="{: U('Admin/changepwd')}" method="post">
+<input type="text" name="username" class="login-input" placeholder="登录名" />
+<input type="text" name="pwd" class="login-input" placeholder="登录密码" /><br />
+<input type="hidden" name="id" value="{$id}">
+<input type="submit" name="submit" value="提交" class="login-submit" /></form>

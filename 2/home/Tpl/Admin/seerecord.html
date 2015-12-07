@@ -1,0 +1,9 @@
+<div class="div1">
+域名ID:{$result['record_id']},<br />
+域名:{$result['sub_domain']}.{$result['frist_domain']},<br />
+类型:{$result['record_type']},<br />
+值:{$result['value']},<br />
+所有人ID:{$result['userid']}.<br />
+<a class="link1" href="{:U('Admin/del?record_id='.$result['record_id'])}">删除</a>
+
+</div>

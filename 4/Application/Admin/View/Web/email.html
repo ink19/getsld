@@ -1,0 +1,87 @@
+<br />
+<div class="am-g am-text-lg">
+<div class="am-u-sm-2">发件人：</div>
+<div class="am-u-sm-10"><input type="text" id="email-input-user" class="am-form-field am-radius" value="" /></div>
+</div>
+
+<div class="am-g am-text-lg">
+<div class="am-u-sm-2">邮箱：</div>
+<div class="am-u-sm-10"><input type="text" id="email-input-mail" class="am-form-field am-radius" value="" /></div>
+</div>
+
+<div class="am-g am-text-lg">
+<div class="am-u-sm-2">密码：</div>
+<div class="am-u-sm-10"><input type="password" id="email-input-password" class="am-form-field am-radius" value="" /></div>
+</div>
+
+<div class="am-g am-text-lg">
+<div class="am-u-sm-2">服务器：</div>
+<div class="am-u-sm-10"><input type="text" id="email-input-address" class="am-form-field am-radius" value="" /></div>
+</div>
+
+<div class="am-g am-text-lg">
+<div class="am-u-sm-2">端口：</div>
+<div class="am-u-sm-10"><input type="text" id="email-input-port" class="am-form-field am-radius" value="" /></div>
+</div>
+<hr />
+<div class="am-g">
+<div class="am-u-sm-2 am-u-sm-centered">
+<button class="am-btn am-btn-primary am-radius" id="email-button" type="button">提交</button>
+</div>
+<br />
+</div>
+<script>
+$(function(){
+	$.get("{:U('Web/ajax_email')}",function(result){
+		$("#email-input-user").val(result.user);
+		$("#email-input-mail").val(result.mail);
+		$("#email-input-password").val(result.password);
+		$("#email-input-address").val(result.address);
+		$("#email-input-port").val(result.port);
+	},"json");
+});
+$(function(){
+	$("#email-button").click(function(){
+		$("#email-input-user").addClass("am-disabled");
+		$("#email-input-password").addClass("am-disabled");
+		$("#email-input-address").addClass("am-disabled");
+		$("#email-input-mail").addClass("am-disabled");
+		$("#email-input-port").addClass("am-disabled");
+		$("#email-button").addClass("am-disabled");
+		var user = $("#email-input-user").val();
+		var mail = $("#email-input-mail").val();
+		var password = $("#email-input-password").val();
+		var address = $("#email-input-address").val();
+		var port = $("#email-input-port").val();
+		if(user && password &&mail && address && port){
+			$.post("{:U('Web/ajax_email')}","user="+user+"&password="+password+"&mail="+mail+"&address="+address+"&port="+port,function(result){
+				if(result == "1"){
+					alert("修改成功");
+					$("#email-input-user").removeClass("am-disabled");
+					$("#email-input-password").removeClass("am-disabled");
+					$("#email-input-address").removeClass("am-disabled");
+					$("#email-input-mail").removeClass("am-disabled");
+					$("#email-input-port").removeClass("am-disabled");
+					$("#email-button").removeClass("am-disabled");
+				}else{
+					alert(result);
+					$("#email-input-user").removeClass("am-disabled");
+					$("#email-input-password").removeClass("am-disabled");
+					$("#email-input-address").removeClass("am-disabled");
+					$("#email-input-mail").removeClass("am-disabled");
+					$("#email-input-port").removeClass("am-disabled");
+					$("#email-button").removeClass("am-disabled");
+				}
+			});
+		}else{
+			alert("请填写完整信息");
+			$("#email-input-user").removeClass("am-disabled");
+			$("#email-input-password").removeClass("am-disabled");
+			$("#email-input-address").removeClass("am-disabled");
+			$("#email-input-mail").removeClass("am-disabled");
+			$("#email-input-port").removeClass("am-disabled");
+			$("#email-button").removeClass("am-disabled");
+		}
+	});
+});
+</script>

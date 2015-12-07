@@ -1,0 +1,79 @@
+<br />
+<div align="center">
+	<font color="#10a0ea">
+		<div class="am-g am-g-fixed"><div class="am-u-sm-2 am-text-right">ID：</div><div class="am-u-sm-10 am-text-left">
+		<span id="user_id" class="am-badge am-badge-primary am-radius">{$UserInfo['id']}</span></div></div>
+		<div class="am-g am-g-fixed"><div class="am-u-sm-2 am-text-right">用户名：</div><div class="am-u-sm-10 am-text-left">
+		<span id="user_name" class="am-badge am-badge-primary am-radius">{$UserInfo['name']}</span></div></div>
+		<div class="am-g am-g-fixed"><div class="am-u-sm-2 am-text-right">邮箱：</div><div class="am-u-sm-10 am-text-left">
+		<span id="user_email_old" class="am-badge am-badge-primary am-radius">{$UserInfo['email']}</span>
+		<input value="" id="user_email_new" style="display:none" class="am-form-field am-radius"></div></div>
+		<div class="am-g am-g-fixed"><div class="am-u-sm-2 am-text-right">密码：</div><div class="am-u-sm-10 am-text-left">
+		<span  id="user_password_old" class="am-badge am-badge-primary am-radius">**********</span>
+		<input value="" id="user_password_new" style="display:none" class="am-form-field am-radius"></div></div><hr />
+		<button type="button" id="mydata_button1" class="am-btn am-btn-primary am-radius">修改资料</button>
+		<button type="button" id="mydata_button2" class="am-btn am-btn-primary am-radius"  style="display:none">保存资料</button>&nbsp;
+		<button type="button" id="mydata_button3" class="am-btn am-btn-primary am-radius" style="display:none">放弃修改</button>
+	</font>
+	<br />
+</div>
+<script>
+$(function(){
+	$("#mydata_button1").click(function(){
+		$("#mydata_button1").hide();
+		$("#mydata_button2").show("slow");
+		$("#mydata_button3").show("slow");
+		$("#user_email_old").hide();
+		$("#user_password_old").hide();
+		$("#user_email_new").val($("#user_email_old").text());
+		$("#user_email_new").show("slow");
+		$("#user_password_new").show("slow");
+	});
+	$("#mydata_button3").click(function(){
+		$("#mydata_button2").hide("slow");
+		$("#mydata_button3").hide("slow",function(){
+			$("#mydata_button1").show();
+		});
+		$("#user_email_new").hide("slow");
+		$("#user_password_new").hide("slow",function(){
+			$("#user_password_old").show();
+			$("#user_email_old").show();
+		});
+	});
+	$("#mydata_button2").click(function(){
+		var user_email;
+		var user_password;
+		user_email = $("#user_email_new").val();
+		user_password = $("#user_password_new").val();
+		if(!user_email){
+			alert("请填写邮箱");
+		}else{
+			$("#mydata_button2").text="保存中…";
+			$("#mydata_button2").attr("disabled","disabled");
+			$.post("{:U('Home/User/updatemydata')}" + "&" + Math.random(),{
+				email:user_email,
+				passord:user_password
+			},function(result){
+				$("#mydata_button2").removeAttr("disabled");
+				if(result == "1"){
+					if(user_password){
+						alert("修改成功,请重新登入");
+						self.location="./";
+					}else{
+						alert("修改成功");
+						$("#user_email_old").text($("#user_email_new").val());
+						$("#my_button2").text("保存资料");
+						$("#my_button2").attr("disabled",null);
+						$("#mydata_button3").click();
+					}
+				}else{
+					alert(result);
+					$("#my_button2").text("保存资料");
+					$("#my_button2").attr("disabled" , null);
+				}
+		});
+	}
+	});
+});
+</script>
+<br />

@@ -1,0 +1,39 @@
+<br>
+<div class="am-g am-text-lg">
+	<form>
+		<div class="am-u-sm-2">本站网址：</div>
+		<div class="am-u-sm-8"><input type="text" value="" id="website" class="am-form-field am-radius"/></div>
+		<div class="am-u-sm-2"><button class="am-btn am-btn-primary am-radius" id="website-button" type="button">提交</button></div>
+	</form>
+</div>
+<script>
+$(function(){
+	$.post("{:U('Web/ajax_addr')}",function(result){
+		$("#website").val(result);
+	});
+});
+$(function(){
+	$("#website-button").click(function(){
+		$("#website").attr("disabled",1);
+		$("#website-button").attr("disabled",1);
+		var website = $("#website").val();
+		if(website){
+			$.post("{:U('Web/ajax_addr')}","website="+website,function(result){
+				if(result == "1"){
+					alert("修改成功");
+					$("#website").removeAttr("disabled");
+					$("#website-button").removeAttr("disabled");
+				}else{
+					alert(result);
+					$("#website").removeAttr("disabled");
+					$("#website-button").removeAttr("disabled");
+				}
+			});
+		}else{
+			alert("请填写完整的信息");
+			$("#website").removeAttr("disabled");
+			$("#website-button").removeAttr("disabled");
+		}
+	});
+});
+</script>

@@ -1,0 +1,132 @@
+<div class="am-g">
+<table class="am-table am-table-striped am-table-hover">
+<thead>
+<tr>
+<th>用户ID</th>
+<th>用户名</th>
+<th>邮箱</th>
+<th>域名数</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody id="content_tbody">
+
+</tbody>
+</table>
+<input type="hidden" value="1" id="page" />
+<ul class="am-pagination  am-pagination-centered" id="p">
+
+</ul>
+<div class="am-modal am-modal-confirm" tabindex="-1" id="user-list-modal">
+	<div class="am-modal-dialog">
+		<div class="am-modal-hd">用户信息</div>
+		<div class="am-modal-bd">
+		<div class="am-g">
+			<div class="am-u-sm-6 am-u-sm-centered am-text-left">用户ID：<span class="am-text-right" id="user-list-modal-userid"></span></div>
+			<div class="am-u-sm-6 am-u-sm-centered am-text-left">用户名：<span class="am-text-right" id="user-list-modal-name"></span></div>
+			<div class="am-u-sm-6 am-u-sm-centered am-text-left">用户邮箱：<span class="am-text-right" id="user-list-modal-email"></span></div>
+			<div class="am-u-sm-6 am-u-sm-centered am-text-left">域名数：<span class="am-text-right" id="user-list-modal-record-number"></span></div>
+			<div class="am-u-sm-6 am-u-sm-centered am-text-left">上次登入：<span class="am-text-right" id="user-list-modal-last-time"></span></div>
+			<div class="am-u-sm-6 am-u-sm-centered am-text-left">注册时间：<span class="am-text-right" id="user-list-modal-register-time"></span></div>
+			<div class="am-u-sm-6 am-u-sm-centered">
+			<button type="button" class="am-btn am-btn-warning am-round" id="user-list-modal-delete">删除</button>
+			<button type="button" class="am-btn am-btn-warning am-round" id="user-list-modal-confirm">取消</button>
+			</div>
+		</div>
+		</div>
+	</div>
+</div>
+</div>
+<script>
+$(function(){
+	function refresh_page(p){
+		$.post("{:U('User/ajax_get_user_list')}","p="+p,function(result){
+			$("#content_tbody").empty();
+			$("#p").empty();
+			var i = 0;
+			while(vo = result.content[i]){
+				var id = $("<th>").attr("id","userid").text(vo.id);
+				var name = $("<th>").text(vo.name);
+				var email = $("<th>").text(vo.email);
+				var record_number = $("<th>").text(vo.record_number);
+				var button_operation = $("<button>").attr("type","button").attr("id","get_info").addClass("am-btn am-btn-warning am-round").text("查看");
+				var operation = $("<th>").append(button_operation);
+				var u_list = $("<tr>");
+				u_list.append(id);
+				u_list.append(name);
+				u_list.append(email);
+				u_list.append(record_number);
+				u_list.append(operation);
+				$("#content_tbody").append(u_list);
+				i++;
+			}
+			var p = result.page;
+			var p1;
+			if(p.now >= 4){
+				p1= p.now - 2;
+				var page_u = $("<li>").html("<a herf=\"javascript:void(0);\" id=\"page_u\">1</a>");
+				$("ul#p").append(page_u);
+				$("ul#p").append($("<span>").text("<<"));
+			}else{
+				p1 = 1;
+			}
+			if((p.all - p.now) >= 3){
+				p2 = p.now + 2;
+			}else{
+				p2 = p.all;
+			}
+			for(p1 = p1;p1 <= p2;p1++){
+				var page_u = $("<li>").html("<a herf=\"javascript:void(0);\" id=\"page_u\">"+p1+"</a>");
+				if(p1 == p.now){
+					page_u.addClass("am-active");
+				}
+				$("ul#p").append(page_u);
+			}
+			if(p2 != p.all){
+				$("ul#p").append($("<span>").text(">>"));
+				var page_u = $("<li>").html("<a herf=\"javascript:void(0);\" id=\"page_u\">"+p.all+"</a>");
+				$("ul#p").append(page_u);
+			}
+			$("a#page_u").click(function(){
+				var p_page_u = $(this).text();
+				$("#page").val(p_page_u);
+				refresh_page(p_page_u);
+			});
+			$("button#get_info").click(function(){
+				var userid = $(this).parent().prevAll("#userid").text();
+				$.post("{:U('User/ajax_get_user_info')}",{"userid" : userid},function(result){
+					$("#user-list-modal-userid").text(result.userid);
+					$("#user-list-modal-email").text(result.email);
+					$("#user-list-modal-name").text(result.name);
+					$("#user-list-modal-last-time").text(result.last_time);
+					$("#user-list-modal-register-time").text(result.register_time);
+					$("#user-list-modal-record-number").text(result.record_number);
+					$("#user-list-modal").modal();
+				},'json');
+			});
+		},'json');
+	}
+	$("button#user-list-modal-delete").click(function(){
+		$(this).addClass("am-disabled");
+		//console.debug($("button#user-list-modal-delete"));
+		var userid = $("#user-list-modal-userid").text();
+		$.post("{:U('Admin/User/ajax_delete_user')}","userid="+userid,function(result){
+		if(result[0] == "1"){
+				alert("删除成功");
+			}else{
+				alert("删除失败，原因:"+result[1]);
+			}
+			//console.debug($("button#user-list-modal-delete"));
+			refresh_page($("#page").val());
+		},'json');
+		$("#user-list-modal").modal('close');
+		$(this).removeClass("am-disabled");
+	});
+	$("button#user-list-modal-confirm").click(function(){
+		$(this).addClass("am-disabled");
+		$("#user-list-modal").modal('close');
+		$(this).removeClass("am-disabled");
+	});
+	refresh_page($("#page").val());
+});
+</script>

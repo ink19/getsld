@@ -1,0 +1,39 @@
+<br>
+<div class="am-g am-text-lg">
+	<form>
+		<div class="am-u-sm-2">重置次数：</div>
+		<div class="am-u-sm-8"><input type="text" value="" id="reset-times-input" class="am-form-field am-radius"/></div>
+		<div class="am-u-sm-2"><button class="am-btn am-btn-primary am-radius" id="reset-times-button" type="button">提交</button></div>
+	</form>
+</div>
+<script>
+$(function(){
+	$.post("{:U('User/ajax_reset_times')}",function(result){
+		$("#reset-times-input").val(result);
+	});
+});
+$(function(){
+	$("#reset-times-button").click(function(){
+		$("#reset-times-input").attr("disabled",1);
+		$("#reset-times-button").attr("disabled",1);
+		var reset_times = $("#reset-times-input").val();
+		if(reset_times){
+			$.post("{:U('User/ajax_reset_times')}","reset_times="+reset_times,function(result){
+				if(result == "1"){
+					alert("修改成功");
+					$("#reset-times-input").removeAttr("disabled");
+					$("#reset-times-button").removeAttr("disabled");
+				}else{
+					alert(result);
+					$("#reset-times-input").removeAttr("disabled");
+					$("#reset-times-button").removeAttr("disabled");
+				}
+			});
+		}else{
+			alert("请填写完整的信息");
+			$("#reset-times-input").removeAttr("disabled");
+			$("#reset-times-button").removeAttr("disabled");
+		}
+	});
+});
+</script>

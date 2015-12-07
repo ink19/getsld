@@ -1,0 +1,104 @@
+<div class="am-g" style="height:10%"></div>
+<div class="am-g am-g-fixed my-admin-div am-text-lg">
+	<div class="am-u-sm-2 am-text-bottom am-text-xl">后台管理</div>
+		<ul class="am-nav am-nav-tabs">
+			<div class="am-u-sm-2">
+			<li class="am-dropdown" id="admin-domain" data-am-dropdown>
+			<a href="javascript:" class="am-dropdown-toggle" data-am-dropdown-toggle id="admin-a-domain">顶域配置<span class="am-icon-caret-down"></span></a>
+				<ul class="am-dropdown-content">
+					<li><a id="getpage" data-value="{:U('Domain/add_domain')}" href="javascript:;">添加顶域</a></li>
+					<li><a id="getpage" data-value="{:U('Domain/domain_list')}" href="javascript:;">查看顶域</a></li>
+				</ul>
+			</li>
+			</div>
+			<div class="am-u-sm-2">
+			<li class="am-dropdown" id="admin-domain" data-am-dropdown>
+			<a href="javascript:" class="am-dropdown-toggle" data-am-dropdown-toggle id="admin-a-user">用户管理<span class="am-icon-caret-down"></span></a>
+				<ul class="am-dropdown-content">
+					<li><a id="getpage" data-value="{:U('User/user_list')}" href="javascript:;">用户列表</a></li>
+					<li><a id="getpage" data-value="{:U('User/reset_times')}" href="javascript:;">重置次数</a></li>
+					<li><a id="getpage" data-value="{:U('User/limit_number')}" href="javascript:;">记录限制</a></li>
+				</ul>
+			</li>
+			</div>
+			<div class="am-u-sm-2">
+			<li class="am-dropdown" id="admin-record" data-am-dropdown>
+			<a href="javascript:" class="am-dropdown-toggle" data-am-dropdown-toggle id="admin-a-record">记录管理<span class="am-icon-caret-down"></span></a>
+				<ul class="am-dropdown-content">
+					<li><a id="getpage" data-value="{:U('Record/record_list')}" href="javascript:;">记录列表</a></li>
+					<li><a id="getpage" data-value="{:U('Record/recycle')}" href="javascript:;">记录回收</a></li>
+					<li><a id="getpage" data-value="{:U('Record/importent_words')}" href="javascript:;">前缀保留</a></li>
+				</ul>
+			</li>
+			</div>
+			<div class="am-u-sm-2">
+			<li class="am-dropdown" id="admin-config" data-am-dropdown>
+			<a href="javascript:" class="am-dropdown-toggle" data-am-dropdown-toggle id="admin-a-config">网站配置<span class="am-icon-caret-down"></span></a>
+				<ul class="am-dropdown-content">
+					<li><a id="getpage" data-value="{:U('Web/addr')}" href="javascript:;">修改网址</a></li>
+					<li><a id="getpage" data-value="{:U('Web/email')}" href="javascript:;">邮箱配置</a></li>
+					<li><a id="getpage" data-value="{:U('Web/announcement')}" href="javascript:;">发布公告</a></li>
+					<li><a id="getpage" data-value="{:U('Web/admininfo')}" href="javascript:;">管理员信息</a></li>
+				</ul>
+			</li>
+			</div>
+			<div class="am-u-sm-2">
+			<li class="am-dropdown" data-am-dropdown>
+				<a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+				<span class="am-icon-male">管理员</span><span class="am-icon-caret-down"></span>
+				</a>
+				<ul class="am-dropdown-content">
+					<li><a href="javascript:;" id="getpage" data-value="{:U('Admin/changepassword')}">修改密码</a></li>
+					<li><a href="javascript:;">退出</a></li>
+				</ul>
+			</li>
+			</div>
+		</ul>
+</div>
+<div class="am-g am-g-fixed my-admin-content">
+<div class="am-u-sm-2">
+<div class="am-g">
+<div class="am-u-sm-6">用户</div><div class="am-u-sm-6"><span class="am-badge am-badge-danger am-radius" id="admin-user-count">0</span></div>
+</div>
+<div class="am-g">
+<div class="am-u-sm-6">记录</div><div class="am-u-sm-6"><span class="am-badge am-badge-danger am-radius" id="admin-record-count">0</span></div>
+</div>
+<button type="button" id="refresh_count" class="am-btn am-radius am-btn-primary">刷新</button>
+<hr />
+</div>
+<div class="am-u-sm-10" style="border-left-style:solid; border-left-width:1px; border-left-color:#E0E0E0">
+<div id="admin-operate">
+<h1>Welcome!!!</h1>
+<p>
+欢迎感谢使用由墨迹十九开发，基于thinkphp的二级域名分发系统
+</p>
+<p>如果在使用时出现任何问题或发现任何bug，您可以随时与我联系</p>
+<p>QQ:852776153</p>
+<p>email:nkzxwgr@163.com or admin@nkstu.com</p>
+<p>另：欢迎打赏。。。</p>
+<p>支付宝：nkzxwgr@163.com</p>
+</div>
+<script>
+$(function(){
+	$("#refresh_count").click(function(){
+		$(this).addClass("am-active");
+		$(this).addClass("am-disabled");
+		$.get("{:U('Index/ajax_count')}",function(result){
+			$("#admin-user-count").text(result.user);
+			$("#admin-record-count").text(result.record);
+			$("#refresh_count").removeClass("am-active");
+			$("#refresh_count").removeClass("am-disabled");
+		},"json");
+	});
+	$("#refresh_count").click();
+	$("a#getpage").click(function(){
+		var url = $(this).attr("data-value");
+		$.post(url,function(result){
+			$("#admin-operate").html(result);
+			$(document).click();
+		});
+	});
+});
+</script>
+</div>
+</div>

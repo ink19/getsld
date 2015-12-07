@@ -1,0 +1,7 @@
+{$result}<br />
+<form action="{: U('Admin/addrecord')}" method="post">
+<input type="text" name="frist_domain" value="{$_GET['frist_domain']}" class="login-input" placeholder="域名" />
+<input type="text" name="domain_id" value="{$frist_domain['domain_id']}" class="login-input" placeholder="域名ID" />
+<input type="text" name="login_email" value="{$frist_domain['login_email']}" class="login-input" placeholder="登录邮箱" />
+<input type="text" name="login_password" value="{$frist_domain['login_password']}" class="login-input" placeholder="登录密码" />
+<input type="submit" name="submit" value="提交" class="login-submit" /></form>

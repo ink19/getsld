@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title>二级域名分发</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <link rel="alternate icon" type="./Public/image/png" href="assets/i/favicon.png">
+  <link rel="stylesheet" href="./Public/css/amazeui.min.css"/>
+  <style>
+    .header {
+      text-align: center;
+    }
+    .header h1 {
+      font-size: 200%;
+      color: #333;
+      margin-top: 30px;
+    }
+    .header p {
+      font-size: 14px;
+    }
+	.my-right{
+		text-align: right;
+	}
+	.my-left{
+		text-align: left;
+	}
+  </style>
+</head>
+<body>
+<div class="header">
+  <div class="am-g">
+    <h1>二级域名分发</h1>
+    <p>by:myzly</p>
+  </div>
+  <hr />
+</div>
+<div class="am-g">
+  <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
+    <h3>注册</h3>
+    <hr>
+    <form method="post" class="am-form">
+      <label for="name">用户:（15个字符以内）</label>
+      <input type="name" name="name" id="name" class="am-form-field am-radius" value="">
+      <br />
+      <label for="password">密码:</label>
+      <input class="am-form-field am-radius" type="password" name="password" id="password" value="">
+      <br />
+      <label for="password2">重复密码:</label>
+      <input class="am-form-field am-radius" type="password" name="password2" id="password2" value="">
+      <br />
+	  <label for="email">Email</label>:（重置密码使用）</label>
+      <input type="email" name="email" id="email" class="am-form-field am-radius" value="">
+      <br>
+	  <label for="verify">验证码</label>
+	  <input class="am-form-field am-radius" type="text" name="verify" id="verify" />
+	  <img src="{:U('Public/verify')}" class="am-img-responsive" id="verify_img" onclick="change_verify()" alt="验证码" />
+      <br />
+      <div class="am-cf">
+        <button type="button" class="am-btn am-btn-primary am-radius am-btn-block am-fl" onclick="login()" id="button">提交</button>
+      </div>
+	  <div class="am-cf"><div class="am-u-sm-6 my-left"><a href="{:U('User/resetpassword')}">忘记密码</a></div><div class="am-u-sm-6 my-right"><a href="{:U('Login/index')}">登入账号</a></div></div>
+    </form>
+    <hr>
+    <p>Based on ThinkPHP and Amaze UI</p>
+  </div>
+</div>
+</body>
+<script>
+function change_verify(){
+	var verify;
+	verify = document.getElementById("verify_img");
+	verify.src=verify.src+"&"+Math.random();
+}
+function login()
+{
+document.getElementById("button").innerHTML = "提交中。。。";
+document.getElementById("button").disabled = "disabled";
+var xmlhttp;
+var name;
+var password;
+var password2;
+var email;
+var verify;
+var result;
+name = document.getElementById("name").value;
+password = document.getElementById("password").value;
+password2 = document.getElementById("password2").value;
+email = document.getElementById("email").value;
+verify = document.getElementById("verify").value;
+if (window.XMLHttpRequest)
+  { 
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  { 
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+xmlhttp.onreadystatechange=function()
+  { 
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    { 
+    result=xmlhttp.responseText;
+	if(result=="1"){
+		alert("注册成功,返回登入");
+		window.location.href="{:U('Index/index')}";
+	}else{
+		alert(result);
+		document.getElementById("button").disabled=0;
+		document.getElementById("button").innerHTML="提交";
+		change_verify();
+	}
+    }
+  }
+xmlhttp.open("POST","{:U('Reg/reging')}",true);
+xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+xmlhttp.send("name="+name+"&password="+password+"&verify="+verify+"&repassword="+password+"&email="+email);
+}
+</script>
+</html>

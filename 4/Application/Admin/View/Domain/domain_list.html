@@ -1,0 +1,184 @@
+<div class="am-g"><table class="am-table am-table-striped am-table-hover">
+<thead>
+<tr>
+<div class="am-u-sm-2"><th>域名id</th></div>
+<div class="am-u-sm-3"><th>域名</th></div>
+<div class="am-u-sm-2"><th>token_id</th></div>
+<div class="am-u-sm-2"><th>注册人数</th></div>
+<div class="am-u-sm-3"><th>操作</th></div>
+</tr>
+</thead>
+<tbody id="domain_list">
+
+</tbody>
+</table>
+<div class="am-modal am-modal-confirm" tabindex="-1" id="delete-confirm">
+	<div class="am-modal-dialog">
+		<div class="am-modal-hd">删除确定</div>
+		<div class="am-modal-bd">
+			确定要删除<span class="am-text-danger" id="delete-span-domain"></span>吗？
+			<input type="hidden" id="delete-input-domain-id" />
+		</div>
+		<div class="am-modal-footer">
+			<span class="am-modal-btn" data-am-modal-confirm>确定</span>
+			<span class="am-modal-btn" data-am-modal-cancel>取消</span>
+		</div>
+	</div>
+</div>
+<div class="am-modal am-modal-confirm" tabindex="-1" id="change-confirm">
+	<div class="am-modal-dialog">
+		<div class="am-modal-hd">修改<span class="am-text-danger" id="change-span-domain"></span></div>
+		<div class="am-modal-bd">
+			<div class="am-g">
+			<div class="am-u-sm-2">域名：</div>
+			<div class="am-u-sm-10 am-text-left"><span class="am-text-right" id="change-span-domain"></span></div>
+			</div>
+			<div class="am-g">
+			<div class="am-u-sm-2">TokenID：</div>
+			<div class="am-u-sm-10"><input type="text" id="change-domain-token-id" class="am-form-field am-radius"></div>
+			</div>
+			<div class="am-g">
+			<div class="am-u-sm-2">Token：</div>
+			<div class="am-u-sm-10"><input type="text" id="change-domain-token" class="am-form-field am-radius"></div>
+			</div>
+			<div class="am-g">
+			<div class="am-u-sm-2">域名ID：</div>
+			<div class="am-u-sm-8"><input type="text" id="change-domain-domain-id" class="am-form-field am-radius"></div>
+			<div class="am-u-sm-2 am-u-sm-uncentered"><button type="button" class="am-btn am-btn-sm am-btn-primary am-radius" id="change-domain-button-token-id">获取</button></div>
+			</div>
+		</div>
+		<div class="am-modal-footer">
+			<span class="am-modal-btn" data-am-modal-confirm>确定</span>
+			<span class="am-modal-btn" data-am-modal-cancel>取消</span>
+		</div>
+	</div>
+</div>
+</div>
+<script>
+$(function after_page_load(){
+	$("tbody#domain_list").html(' ');
+	function get_domain_list(p){
+		if(p == 0){
+			p = 1;
+		}
+		$.post("{:U('Domain/ajax_get_domain_list')}",{
+			'p' : p
+		},function(result){
+			var i = 0;
+			var vo = 0;
+			var button_u = "<button type=\"button\" id=\"domain-list-change\" class=\"am-btn am-btn-warning am-round\">改</button>/<button type=\"button\" id=\"domain-list-delete\" class=\"am-btn am-btn-danger am-round\">删</button>"; 
+			while(vo = result[i]){
+				var domain_id = $("<td></td>").text(vo.domain_id);
+				domain_id.attr('id','get-domain-id');
+				var domain = $("<td></td>").text(vo.domain);
+				domain.attr('id','get-domain');
+				var token_id = $("<td></td>").text(vo.token_id);
+				var domain_count = $("<td></td>").text(vo.domain_count);
+				var list_u = $("<tr></tr>").append(domain_id);
+				var button = $("<tr></tr>").html(button_u);
+				list_u = list_u.append(domain);
+				list_u = list_u.append(token_id);
+				list_u = list_u.append(domain_count);
+				list_u = list_u.append(button);
+				$("tbody#domain_list").append(list_u);
+				i += 1;
+			}
+			//console.debug($("button#domain-list-delete"));
+			$("button#domain-list-delete").click(function(){
+				var id = $(this).parent().prevAll("#get-domain-id").text();
+				var domain = $(this).parent().prevAll("#get-domain").text();
+				$("#delete-span-domain").text(domain);
+				$("#delete-input-domain-id").val(id);
+				$("#delete-confirm").modal({
+					onConfirm: function(){
+						var domain = $("#delete-span-domain").text();
+						var domain_id = $("#delete-input-domain-id").val();
+						$.post("{:U('Domain/ajax_delete_domain')}",{
+							"domain" : domain,
+							"domain_id" : domain_id
+						},function(result){
+							if(result == "1"){
+								alert('删除成功');
+							}else{
+								alert(result);
+							}
+							after_page_load();
+						});
+					},
+					onCancel: function(){
+						alert('已取消删除');
+					}
+				});
+			});
+			console.debug($("button#domain-list-change"));
+			$("button#domain-list-change").click(function(){
+				var id = $(this).parent().prevAll("#get-domain-id").text();
+				var domain = $(this).parent().prevAll("#get-domain").text();
+				$("span#change-span-domain").text(domain);
+				$.post("{:U('Domain/ajax_get_domain')}",{"domain" : domain},function(result){
+					if(result){
+						$("#change-domain-token-id").val(result.token_id);
+						$("#change-domain-token").val(result.token);
+						$("#change-domain-domain-id").val(result.domain_id);
+						$("#change-confirm").modal({
+							onConfirm:function(){
+								$("input").addClass("am-disabled");
+								var token_id = $("#change-domain-token-id").val();
+								var token = $("#change-domain-token").val();
+								var domain_id = $("#change-domain-domain-id").val();
+								var domain = $("#change-span-domain").text();
+								$.post("{:U('Domain/ajax_change_domain')}",{
+									"domain" : domain,
+									"domain_id" :domain_id,
+									"token_id" : token_id,
+									"token" :token
+								},function(result){
+									if(result == "1"){
+										alert("修改成功");
+									}else{
+										alert("修改失败");
+									}
+									after_page_load();
+								});
+							},
+							onCancel:function(){
+								alert("取消修改");
+							}
+						});
+					}else{
+						alert("错误请重试");
+					}
+				},'json');
+			});
+		});
+	}
+	$("#change-domain-button-token-id").click(function(){
+		$("input").attr("disabled",1);
+		$("#change-domain-button-token-id").attr("disabled",1);
+		$("#change-domain-button").attr("disabled",1);
+		var first_domain = $("#change-span-domain").text();
+		var token_id = $("#change-domain-token-id").val();
+		var token = $("#change-domain-token").val();
+		console.debug(first_domain,token_id,token);
+		if(first_domain && token_id && token){
+			$.post("{:U('Domain/ajax_get_domainid')}",{
+				'first_domain' : first_domain,
+				'token_id' : token_id,
+				'token' :token
+			},function(result){
+				if(result[0] == "1"){
+					$("#change-domain-domain-id").val(result[1]);
+				}else{
+					alert(result[1]);
+				}
+			},"json");
+		}else{
+			alert("信息不完整");
+		}
+		$("input").removeAttr("disabled");
+		$("#change-domain-button-token-id").removeAttr("disabled");
+		$("#change-domain-button").removeAttr("disabled");
+	});
+	get_domain_list(1);
+});
+</script>

@@ -1,0 +1,6 @@
+<table><tr><td>ID</td><td>用户名</td><td>操作</td></tr>
+<foreach name="result" item="i">
+<tr><td>{$i['id']}</td><td>{$i['name']}</td><td><a href="{:U('Admin/Record/entry?id='.$i['id'])}">查看</a></td></tr>
+</foreach>
+</table>
+{$show}

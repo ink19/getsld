@@ -1,0 +1,24 @@
+[ 2015-01-06T13:12:31+08:00 ] 111.78.20.175 /dnspodt/
+INFO: [ app_begin ] --START--
+INFO: ReadHtmlCache Behavior ::run [ RunTime:0.000304s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000365s ]
+INFO: [ view_parse ] --START--
+INFO: ParseTemplate Behavior ::run [ RunTime:0.003669s ]
+INFO: [ view_parse ] --END-- [ RunTime:0.003730s ]
+INFO: [ view_filter ] --START--
+NOTIC: [8] Use of undefined constant APP_TMPL_PATH - assumed 'APP_TMPL_PATH' /home/ftp/n/nkstu/wwwroot/dnspodt/ThinkPHP/Lib/Behavior/ContentReplaceBehavior.class.php 第 40 行.
+NOTIC: [8] Use of undefined constant APP_TMPL_PATH - assumed 'APP_TMPL_PATH' /home/ftp/n/nkstu/wwwroot/dnspodt/ThinkPHP/Lib/Behavior/ContentReplaceBehavior.class.php 第 47 行.
+INFO: ContentReplace Behavior ::run [ RunTime:0.000233s ]
+INFO: TokenBuild Behavior ::run [ RunTime:0.000208s ]
+INFO: WriteHtmlCache Behavior ::run [ RunTime:0.000133s ]
+INFO: ShowRuntime Behavior ::run [ RunTime:0.000260s ]
+INFO: [ view_filter ] --END-- [ RunTime:0.000950s ]
+INFO: [ view_end ] --START--
+INFO: ShowPageTrace Behavior ::run [ RunTime:0.000329s ]
+INFO: [ view_end ] --END-- [ RunTime:0.000370s ]
+
+[ 2015-01-06T23:21:14+08:00 ] 111.78.20.175 /dnspodt/
+INFO: [ app_begin ] --START--
+INFO: ReadHtmlCache Behavior ::run [ RunTime:0.000338s ]
+INFO: [ app_begin ] --END-- [ RunTime:0.000425s ]
+
