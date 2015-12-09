@@ -19,7 +19,7 @@ return array(
 'LAYOUT_NAME' => 'layout',		//全局模板名称
 'SESSION_PREFIX' => 'dns',		//session前缀
 'COOKIE_PREFIX' =>  'dns',		//cookie前缀
-'SHOW_PAGE_TRACE' =>	true,		//是否展现trace，注意：运营时一定要为false
+'SHOW_PAGE_TRACE' =>	false,		//是否展现trace，注意：运营时一定要为false
 'MODULE_ALLOW_LIST'    =>    array('Home','Admin'), //允许的module
 'DEFAULT_MODULE'       =>    'Home',//默认module
 'DEFAULT_TIMEZONE'      => 'PRC',//时区

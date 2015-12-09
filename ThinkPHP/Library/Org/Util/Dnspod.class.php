@@ -65,18 +65,18 @@
 			$this->result=$this->dns_curl();
 		}
 		//删除记录
-		function dns_delete(){
+		public function dns_delete(){
 			$this->api_addr="Record.Remove";
 			$this->api_data["record_id"]=$this->record_id;
 			$this->result=$this->dns_curl();
 		}
-		function dns_getinfo($domain){
+		public function dns_getinfo($domain){
 			$this->api_addr = "Domain.Info";
 			unset($this->api_data['domain_id']);
 			$this->api_data['domain'] = $domain;
 			$this->result=$this->dns_curl();
 		}
-		function dns_bacth_stop($data){
+		public function dns_recycle($data){
 			$this->api_addr = "Batch.Record.Modify";
 			$this->api_data['record_id'] = implode(',',$data);
 			$this->api_data['change'] = 'status';

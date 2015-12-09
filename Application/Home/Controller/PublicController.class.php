@@ -14,11 +14,16 @@ class PublicController extends Controller{
 		$Verify->entry();
     }
 	public function website(){
+		C('LAYOUT_ON',false);
+		$Admin =D('Admin');
+		$this->website = html_entity_decode($Admin->getConf('admin_info'));
 		$this->display();
 	}
 	public function announcement(){
 		C('LAYOUT_ON',false);
-		$this->display('Index/index');
+		$Admin =D('Admin');
+		$this->announcement = json_decode($Admin->getConf('announcement'),true);
+		$this->display();
 	}
 }
 ?>

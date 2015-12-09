@@ -64,6 +64,9 @@ code text
 			$sql->addConf('mail_info',$email);
 			$sql->addConf('userlock',$userlock);
 			$sql->addConf('website_address',$website);
+			$sql->addConf('limit_number',0);
+			$sql->addConf('admin_info',null);
+			$sql->addConf('announcement',null);
 			$sql->addConf('day',date('d'));
 			file_put_contents('lock.lock','lock.lock');
 			echo 'installed successfully,you can enter ./admin.php to manage your website.';

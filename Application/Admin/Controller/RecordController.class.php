@@ -1,104 +1,130 @@
 <?php
-	namespace Admin\Controller;
-	use Think\Controller;
-	class RecordController extends Controller{
-		public function record_list(){
-			R('Admin/yz');
-			C('LAYOUT_ON',false);
-			$this->display();
+namespace Admin\Controller;
+use Think\Controller;
+class RecordController extends Controller{
+	public function record_list(){
+		R('Admin/yz');
+		C('LAYOUT_ON',false);
+		$this->display();
+	}
+	public function recycle(){
+		R('Admin/yz');
+		C('LAYOUT_ON',false);
+		$this->display();
+	}
+	public function important_words(){
+		R('Admin/yz');
+		C('LAYOUT_ON',false);
+		$this->display();
+	}
+	public function ajax_get_record_list(){
+		R('Admin/yz');
+		C('LAYOUT_ON',false);
+		$p = (int)(I('post.p')?I('post.p'):1);
+		$Record = D('Record');
+		$result = $Record->GetRecord($p);
+		foreach($result as &$vo) {
+			unset($result['mx']);
+			unset($result['ttl']);
 		}
-		public function recycle(){
-			R('Admin/yz');
-			C('LAYOUT_ON',false);
-			$this->display();
-		}
-		public function important_words(){
-			R('Admin/yz');
-			C('LAYOUT_ON',false);
-			$this->display();
-		}
-		public function ajax_get_record_list(){
-			
-		}
-		public function ajax_delete_record(){
-			
-		}
-		public function ajax_put_recyle(){
-
-		}
-		public function ajax_important_words(){
-			$important_words = I('post.important_words');
-			if($important_words){
-				$data=explode(",",$important_words);
-				if($conf->saveConf('important_sub_domain')){
-					$this->ajaxReturn(array(1,$data),'json');
+		$all = ceil($Record->count()/10);
+		$result = array('page' =>array(
+				'all' => $all,
+				'now' => $p
+			),'content' => $result);
+		$this->ajaxReturn($result,'json');
+	}
+	public function ajax_delete_record(){
+		R('Admin/yz');
+		C('LAYOUT_ON',false);
+		$record_id = I('post.record_id');
+		if($record_id){
+			$Record = D("Record");
+			$record_info = $Record->FindRecord($record_id);
+			if($record_info[0]){
+				$Admin = D('Admin');
+				$domain_conf = json_decode($Admin->getConf("domain_info_{$record_info[1]['first_domain']}"),true);
+				//var_dump($Admin->getLastSql());
+				$Dnspod = new \Org\Util\Dnspod($domain_conf);
+				$Dnspod->record_id = $record_id;
+				$Dnspod->dns_delete();
+				if($Dnspod->result['status']['code'] != 1){
+					$this->ajaxReturn(array(0,"DNSPOD删除域名失败，原因：".$Dnspod->result['status']['message']),'json');
 				}else{
-					$this->ajaxReturn(array(0,json_decode($conf->getConf('important_sub_domain'))),'json');
+					$result = $Record->DeleteRecord($record_id);
+					if($result[0]){
+						$this->ajaxReturn(array(1,$record_id),'json');
+					}else{
+						$this->ajaxReturn(array(0,"删除失败，原因：".$result[1]),'json');
+					}
 				}
 			}else{
-				$this->ajaxReturn(json_decode($conf->getConf('important_sub_domain')),'json');
+				$this->ajaxReturn(array(0,"域名不存在"),'json');
 			}
-		}
-		public function ajax_get_recycle_list($p){
-			
-		}
-		//old
-		public function importantsub(){
-			R('Admin/yz');
-			$conf=D('Admin');
-			$this->id=$conf->getId('important_sub_domain');
-			if(I('submit',false)){
-				$data1=explode(",",I('post.important'));
-				$conf->saveConf('important_sub_domain',$data1,I('post.id'));
-				$this->result="成功";
-			}
-			$this->important=implode(',',json_decode($conf->getConf('important_sub_domain'),true));
-			$this->tittle="修改域名前缀";
-			$this->display();
-		}
-		
-		public function entry($id=null){
-			R('Admin/yz');
-			$Record=M('Record');
-			if($id){
-				$sql='userid ='.$id;
-			}else{
-				$sql=1;
-			}
-			$list = $Record->where($sql)->order('record_id')->page(I('get.p',1).',25')->select();
-			$count = $Record->where($sql)->count();
-			$Page  = new \Think\Page($count,25);
-			$this->show = $Page->show();
-			$this->result=$list;
-			$this->tittle='用户记录管理';
-			$this->display();
-		}
-		public function seerecord($record_id){
-			$this->tittle="查看域名";
-			R('Admin/yz');
-			$record=D('Record');
-			$this->result=$record->where("record_id ='".$record_id."'")->find();
-			$this->display();
-		}
-		public function delete($record_id){
-			R('Admin/yz');
-			$record=D('Record');
-			$conf=D('Admin');
-			$record_info=$record->where("record_id ='".$record_id."'")->find();
-			$conf_domain_info=json_decode($conf->getConf('domain_info_'.$record_info['frist_domain']),true);
-			$d=new \Org\Util\Dnspod($conf_domain_info);
-			$d->record_id=I('get.record_id');
-			$d->dns_delete();
-			$re=$d->result;
-			if($re['status']['code']!='1'){
-				$this->result="错误！".$re['status']['message'];
-			}else{
-				$record->DeleteRecord($record_id,$record_info['userid']);
-				$this->result="成功";
-			}
-			$this->tittle="删除域名";
-			$this->display();
+		}else{
+			$this->ajaxReturn(array(0,"未获取记录ID"),'json');
 		}
 	}
-
+	public function ajax_put_recycle(){
+		R('Admin/yz');
+		C('LAYOUT_ON',false);
+		$record_id = I('post.record_id');
+		if($record_id){
+			$Record = D("Record");
+			$record_info = $Record->FindRecord($record_id);
+			if($record_info[0]){
+				$Admin = D('Admin');
+				$domain_conf = json_decode($Admin->getConf("domain_info_{$record_info[1]['first_domain']}"),true);
+				$Dnspod = new \Org\Util\Dnspod($domain_conf);
+				$Dnspod->dns_recycle(array($record_id));
+				if($Dnspod->result['status']['code'] != 1){
+					$this->ajaxReturn(array(0,"DNSPOD回收域名失败，原因：".$Dnspod->result['status']['message']),'json');
+				}else{
+					$result = $Record->RecycleRecord(array($record_id));
+					if($result[0][0]){
+						$this->ajaxReturn(array(1,$record_id),'json');
+					}else{
+						$this->ajaxReturn(array(0,$result[0][1]),'json');
+					}
+				}
+			}else{
+				$this->ajaxReturn(array(0,"域名不存在"),'json');
+			}
+		}else{
+			$this->ajaxReturn(array(0,"未获取记录ID"),'json');
+		}
+	}
+	public function ajax_important_words(){
+		R('Admin/yz');
+		$conf = D('Admin');
+		$important_words = I('post.important_words');
+		if($important_words){
+			$data=explode(",",$important_words);
+			if($conf->saveConf('important_sub_domain',$data)){
+				$this->ajaxReturn(array(1,$data),'json');
+			}else{
+				$this->ajaxReturn(array(0,json_decode($conf->getConf('important_sub_domain'))),'json');
+			}
+		}else{
+			$this->ajaxReturn(json_decode($conf->getConf('important_sub_domain')),'json');
+		}
+	}
+	public function ajax_get_recycle_list(){
+		R('Admin/yz');
+		C('LAYOUT_ON',false);
+		$p = (int)(I('post.p')?I('post.p'):1);
+		$Record = D('Record');
+		$result = $Record->GetRecycleRecord($p);
+		foreach($result as &$vo) {
+			unset($result['mx']);
+			unset($result['ttl']);
+		}
+		$all = ceil($Record->where("`userid` = '0'")->count()/10);
+		$result = array('page' =>array(
+				'all' => $all,
+				'now' => $p
+			),'content' => $result);
+		$this->ajaxReturn($result,'json');
+	}
+}
 ?>

@@ -1,0 +1,39 @@
+<br>
+<div class="am-g">
+	<form>
+		<div class="am-g am-text-lg"><div class="am-u-sm-2">保留前缀：</div>
+		<div class="am-u-sm-2"><button class="am-btn am-btn-primary am-radius" id="important-words-button" type="button">提交</button></div></div>
+		<br /><div class="am-form-group am-text-lg am-text-center"><textarea class="am-radius" rows="15" cols="80" id="important-words-text"></textarea></div>
+	</form>
+</div>
+<script>
+$(function(){
+	$.post("{:U('Record/ajax_important_words')}",function(result){
+		$("#important-words-text").val(result.join(","));
+	},'json');
+});
+$(function(){
+	$("#important-words-button").click(function(){
+		$("#important-words-text").attr("disabled",1);
+		$("#important-words-button").attr("disabled",1);
+		var important_words = $("#important-words-text").val();
+		if(important_words){
+			$.post("{:U('Record/ajax_important_words')}","important_words="+important_words,function(result){
+				if(result[0] == "1"){
+					alert("修改成功");
+					$("#important-words-text").removeAttr("disabled");
+					$("#important-words-button").removeAttr("disabled");
+				}else{
+					alert("修改失败");
+					$("#important-words-text").removeAttr("disabled");
+					$("#important-words-button").removeAttr("disabled");
+				}
+			});
+		}else{
+			alert("请填写完整的信息");
+			$("#important-words-text").removeAttr("disabled");
+			$("#important-words-button").removeAttr("disabled");
+		}
+	});
+});
+</script>

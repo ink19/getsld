@@ -14,6 +14,9 @@ class RecordModel extends Model{
 			}
 		}
 	}
+	public function CountRecord($userid){
+		return $this->where("`userid` = '{$userid}'")->count();
+	}
 	public function SaveRecord(array $data){
 		if(!$this->create($data)){
 			return array(0,$this->getError());

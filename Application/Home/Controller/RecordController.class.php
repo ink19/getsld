@@ -31,12 +31,19 @@
 			$conf_first_domain = json_decode($conf->getConf('first_domain'),true);
 			$conf_important_sub_domain = json_decode($conf->getConf('important_sub_domain'),true);
 			$record = D('Record');
+			if(!($limit_number = $conf->getConf('limit_number'))){
+				$limit = 0;
+			}else{
+				$limit = 1;
+			}
 			if(!in_array($first_domain,$conf_first_domain)){
 				die('顶级域错误');
 			}elseif(in_array($sub_domain,$conf_important_sub_domain)){
 				die('域名前缀被保留');
 			}elseif(!$record->CheckRecord(array("sub_domain" => $sub_domain,"first_domain" => $first_domain))){
 				die('域名前缀已被使用');
+			}elseif(($record->CountRecord($UserInfo['id']) >= $limit_number) and $limit){
+				die('域名数超过限制');
 			}else{
 				$conf_domain_info=json_decode($conf->getConf('domain_info_'.$first_domain),true);
 				$d=new \Org\Util\Dnspod($conf_domain_info);
