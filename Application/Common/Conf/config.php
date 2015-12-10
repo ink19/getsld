@@ -4,11 +4,11 @@ return array(
 以下是数据库的配置，请在安装前配置
 */
 'DB_TYPE' => 'mysql',
-'DB_HOST' => SAE_MYSQL_HOST_M,	//数据库地址
-'DB_USER' => SAE_MYSQL_USER,	//数据库用户名
-'DB_NAME' => SAE_MYSQL_DB,		//数据库名
-'DB_PWD' => SAE_MYSQL_PASS,		//数据库密码
-'DB_PORT' => SAE_MYSQL_PORT,	//数据库端口
+'DB_HOST' => '127.0.0.1',	//数据库地址
+'DB_USER' => 'root',	//数据库用户名
+'DB_NAME' => 'test',		//数据库名
+'DB_PWD' => '',		//数据库密码
+'DB_PORT' => 3306,	//数据库端口
 'DB_PREFIX' => 'cj_',			//数据库表前缀
 'DB_CHARSET' => 'utf8',			//数据库编码
 /*
