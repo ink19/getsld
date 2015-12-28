@@ -79,6 +79,7 @@
 		public function dns_recycle($data){
 			$this->api_addr = "Batch.Record.Modify";
 			$this->api_data['record_id'] = implode(',',$data);
+			unset($this->api_data["domain_id"]);
 			$this->api_data['change'] = 'status';
 			$this->api_data['change_to'] = 'disabled';
 			$this->result = $this->dns_curl();

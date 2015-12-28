@@ -62,7 +62,8 @@
 						"first_domain" => $first_domain,
 						"record_type" => $record_type,
 						"value" => $value,
-						"userid" => $UserInfo['id']
+						"userid" => $UserInfo['id'],
+						"ttl" => '600'
 					);
 					$re=$record->AddRecord($data);
 					if(!$re[0]){
