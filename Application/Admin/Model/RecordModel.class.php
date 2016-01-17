@@ -12,6 +12,7 @@
 namespace Admin\Model;
 use Think\Model;
 class RecordModel extends Model{
+	protected $fields = array('record_id','sub_domain','first_domain','record_type','value','userid','ttl','age','_pk'=>'record_id');
 	public function AddRecord(array $data){
 		if(!$this->create($data,1)){
 			return array(0,$this->getError());
