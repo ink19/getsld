@@ -52,7 +52,7 @@ $(function(){
 			$("#mydata_button2").attr("disabled","disabled");
 			$.post("{:U('Home/User/updatemydata')}" + "&" + Math.random(),{
 				email:user_email,
-				passord:user_password
+				password:user_password
 			},function(result){
 				$("#mydata_button2").removeAttr("disabled");
 				if(result == "1"){
