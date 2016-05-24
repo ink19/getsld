@@ -38,6 +38,8 @@ class RecordController extends Controller{
 		}
 		if(!in_array($first_domain,$conf_first_domain)){
 			die('顶级域错误');
+		}elseif(strrpos($first_domain, "*") === false){
+			die('禁止泛解析');
 		}elseif(in_array($sub_domain,$conf_important_sub_domain)){
 			die('域名前缀被保留');
 		}elseif(!$record->CheckRecord(array("sub_domain" => $sub_domain,"first_domain" => $first_domain))){
