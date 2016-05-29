@@ -63,9 +63,14 @@
 			}
 		}
 		public function UpdateUser($data){
-			if($this->where("`id` = {$data['id']}")->setField('password',$data['password']) == 1){
+			$userInfo = $this->where(array('id' => $data['id']))->find();
+			if($data['password'] == $userInfo['password'] && $userInfo['email'] == $data['email']) {
 				return 1;
-			}else{
+			}
+
+			if($this->where(array('id' => $data['id']))->save($data)){
+				return 1;
+			} else {
 				return 0;
 			}
 		}
