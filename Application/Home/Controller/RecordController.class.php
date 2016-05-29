@@ -56,7 +56,11 @@ class RecordController extends Controller{
 			$d->dns_add();
 			$result=$d->result;
 			if($result['status']['code']!="1"){
-				die("API错误！".$result['status']['message']);
+				if($result['status']['code']==34){
+					die("记录值非法");
+				} else{
+					die("失败".$result['status']['message']); 
+				}
 			}else{
 				$data=array(
 					"record_id" => $result['record']['id'],
@@ -98,7 +102,11 @@ class RecordController extends Controller{
 			$d->dns_updata();
 			$result=$d->result;
 			if($result['status']['code']!=1){ 
-				die("失败".$result['status']['message']); 
+				if($result['status']['code']==34){
+					die("记录值非法");
+				} else{
+					die("失败".$result['status']['message']); 
+				}
 			}else{
 				$data=array(
 					"record_id" => $result['record']['id'],
