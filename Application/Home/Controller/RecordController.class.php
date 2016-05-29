@@ -99,7 +99,7 @@ class RecordController extends Controller{
 			$d->sub_domain=$record_info[1]['sub_domain'];
 			$d->mx='1';
 			$d->value=$record_value;
-			$d->dns_updata();
+			$d->dns_updata(); 
 			$result=$d->result;
 			if($result['status']['code']!=1){ 
 				if($result['status']['code']==34){
