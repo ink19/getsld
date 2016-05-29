@@ -129,7 +129,7 @@
 					$("#record-list-recycle-id").val($(this).parent().parent().attr("id"));
 					$("#record-list-recycle-modal").modal({
 						onConfirm:function(){
-							$.post("{:U('Record/ajax_put_recycle')}","record_id="+$("#record-list-delete-id").val(),function(result){
+							$.post("{:U('Record/ajax_put_recycle')}","record_id="+$("#record-list-recycle-id").val(),function(result){
 								if(result[0] == "1"){
 									alert("回收成功");
 									$("tr#"+result[1]).hide('slow');
